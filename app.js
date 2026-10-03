@@ -20,13 +20,13 @@ function formatParagraphs(str) {
 }
 
 // Unsplash image links (images.unsplash.com/...) get resized on Unsplash's side,
-// so the page loads a 600px-tall version (sharp at 300px on retina screens).
+// so the page loads an 800px-wide version (sharp at 400px on retina screens).
 function imageUrl(src) {
   try {
     const url = new URL(src);
     if (url.hostname === 'images.unsplash.com') {
-      url.searchParams.delete('w');
-      url.searchParams.set('h', '600');
+      url.searchParams.delete('h');
+      url.searchParams.set('w', '800');
       url.searchParams.set('q', '80');
       url.searchParams.set('auto', 'format');
       url.searchParams.set('fit', 'max');
@@ -86,7 +86,23 @@ function render() {
     filter.hidden = true;
   }
 
-  document.getElementById('posts').innerHTML = posts.map(renderPost).join('');
+  // Reading-order labels: one at the start, a nudge every few posts, one at the end.
+  const NUDGE_EVERY = 6;
+  const nudges = ["keep scrollin'", "keeeep scrollin'", "still going", "further down", "almost caught up"];
+  const marker = (cls, text, arrow = '↓') =>
+    `<div class="marker ${cls}">${text}${arrow ? `<span class="arrow">${arrow}</span>` : ''}</div>`;
+
+  let html = marker('start', tag ? 'oldest first' : 'start here. oldest first');
+  posts.forEach((p, i) => {
+    html += renderPost(p);
+    const isLast = i === posts.length - 1;
+    if (!isLast && (i + 1) % NUDGE_EVERY === 0) {
+      html += marker('nudge', nudges[Math.min((i + 1) / NUDGE_EVERY - 1, nudges.length - 1)]);
+    }
+  });
+  html += marker('end', 'you’re caught up. for now.', '');
+
+  document.getElementById('posts').innerHTML = html;
   window.scrollTo(0, 0);
 }
 
