@@ -2,7 +2,17 @@
 
 # THE REMAINED
 
-A plain HTML/CSS/JS blog. All content lives in `posts.json`. Reads oldest first: top of the page is the beginning, scroll down to move forward in time.
+*Those who never left. A serialized record of altered continuation.*
+
+THE REMAINED is an epistolary fiction told entirely through one narrator's blog. Something fungal-adjacent has settled into people's bodies, and the genre expects an apocalypse: spores, outbreaks, things that click in the dark. None of that happens. The change doesn't spread or hunt anyone. It builds workarounds around old damage, reroutes perception toward rooms instead of faces, and leaves the narrator to handle what's actually hard, which is everyone else deciding how close to stand.
+
+There is no plot summary and no lore page. The world comes through in short posts: logs, notes to self, an unsent draft, answers to questions people keep asking. Read it like a stranger's blog you found and couldn't stop scrolling.
+
+Reads oldest first: start at the top, scroll down to move forward in time.
+
+## About this repo
+
+A plain HTML/CSS/JS site with no build step. All content lives in `posts.json`.
 
 ## Files
 

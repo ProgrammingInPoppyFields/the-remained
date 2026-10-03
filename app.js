@@ -36,6 +36,24 @@ function imageUrl(src) {
   return src;
 }
 
+// Unsplash links get cropped to an exact size on Unsplash's side.
+// Other URLs (or local files) are used as-is.
+function croppedUrl(src, w, h) {
+  try {
+    const url = new URL(src);
+    if (url.hostname === 'images.unsplash.com') {
+      url.searchParams.set('w', String(w));
+      url.searchParams.set('h', String(h));
+      url.searchParams.set('fit', 'crop');
+      url.searchParams.set('crop', 'entropy');
+      url.searchParams.set('q', '80');
+      url.searchParams.set('auto', 'format');
+      return url.toString();
+    }
+  } catch (e) { /* relative path */ }
+  return src;
+}
+
 // A text block starting with "> " becomes an indented quote.
 function renderBlock(block) {
   if (typeof block === 'string') {
@@ -115,8 +133,22 @@ fetch('posts.json')
       document.title = site.title;
       document.getElementById('site-title').textContent = site.title;
     }
+    if (site.favicon) {
+      // square crop, 128x128 so it stays sharp on retina tabs
+      document.getElementById('favicon').href = croppedUrl(site.favicon, 128, 128);
+    }
+    if (site.sidebarImage) {
+      const img = document.getElementById('sidebar-image');
+      img.src = croppedUrl(site.sidebarImage, 600, 750);
+      img.hidden = false;
+    }
     if (site.description) {
       document.getElementById('site-description').innerHTML = formatParagraphs(site.description);
+    }
+    if (site.about) {
+      const about = document.getElementById('site-about');
+      about.innerHTML = formatParagraphs(site.about);
+      about.hidden = false;
     }
     render();
     window.addEventListener('hashchange', render);

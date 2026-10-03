@@ -1,28 +1,19 @@
-/* ---------- colors (edit these to retheme) ---------- */
+/* ---------- colors (edit these to retheme) ----------
+   Matched to the original Tumblr theme: soft warm-neutral grays,
+   charcoal-gray bars, near-black headings. */
 :root {
-  --bg: #ededed;
-  --card: #e4e4e4;
-  --text: #555555;
-  --strong: #121212;
-  --muted: #848484;
-  --border: #d6d6d6;
-  --bar: #919191;
-  --bar-text: #f2f2f2;
-  --shadow: rgba(153, 153, 153, 0.75);
-}
+  --bg: #e8e8e8;          /* page background */
+  --card: #e0e0e0;        /* posts, sidebar, top bar */
+  --text: #555555;        /* body text */
+  --strong: #141414;      /* titles, bold */
+  --muted: #8c8c8c;       /* small labels */
+  --border: #d2d2d2;      /* thin dividers */
+  --bar: #888888;         /* sidebar nav + post footers */
+  --bar-text: #f0f0f0;
+  --chip: #e2e2e2;        /* tag buttons */
+  --shadow: rgba(120, 120, 120, 0.55);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #161616;
-    --card: #1f1f1f;
-    --text: #b8b8b8;
-    --strong: #f0f0f0;
-    --muted: #8a8a8a;
-    --border: #2e2e2e;
-    --bar: #2c2c2c;
-    --bar-text: #e0e0e0;
-    --shadow: rgba(0, 0, 0, 0.6);
-  }
+  --pad: 32px;            /* inner padding of cards */
 }
 
 /* ---------- base ---------- */
@@ -33,12 +24,12 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  letter-spacing: 0.04em;
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: 0.05em;
 }
 
-a { color: var(--muted); text-decoration: none; transition: color 0.3s; }
+a { color: var(--muted); text-decoration: none; transition: color 0.3s, background 0.3s; }
 a:hover { color: var(--strong); }
 strong { color: var(--strong); }
 
@@ -49,14 +40,14 @@ strong { color: var(--strong); }
   z-index: 10;
   background: var(--card);
   box-shadow: 0 1px 3px var(--shadow);
-  padding: 1em;
+  padding: 18px 16px;
   text-align: center;
 }
 
 .site-title {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
-  font-size: 1.25em;
+  font-size: 1.3em;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--strong);
@@ -64,44 +55,68 @@ strong { color: var(--strong); }
 
 /* ---------- layout ---------- */
 .layout {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 110px 16px 80px;
+  padding: 120px 16px 100px;
   display: grid;
-  grid-template-columns: 225px minmax(0, 540px);
-  gap: 100px;
+  grid-template-columns: 240px minmax(0, 580px);
+  gap: 90px;
   justify-content: center;
 }
 
+/* ---------- sidebar ---------- */
 .sidebar-card {
   position: sticky;
-  top: 110px;
+  top: 120px;
   background: var(--card);
   box-shadow: 0 0 5px 1px var(--shadow);
 }
 
-.description { padding: 1.5em; border-bottom: 1px solid var(--border); }
+.sidebar-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.sidebar-image[hidden] { display: none; }
+
+.description {
+  padding: 24px 26px 22px;
+  border-bottom: 1px solid var(--border);
+}
 .description p { margin: 0; }
 
-.how-to-read {
-  padding: 1.25em 1.5em;
+.about {
+  padding: 18px 26px 20px;
   border-bottom: 1px solid var(--border);
+  font-size: 0.85em;
+  line-height: 1.7;
+}
+.about p { margin: 0; }
+.about p + p { margin-top: 0.8em; }
+.about[hidden] { display: none; }
+
+.how-to-read {
+  padding: 18px 26px 20px;
   font-size: 0.8em;
+  line-height: 1.8;
   color: var(--muted);
 }
 .how-to-read p { margin: 0; }
 
 .nav {
   background: var(--bar);
-  padding: 1.5em;
+  padding: 22px 26px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.9em;
 }
-.nav a { color: var(--bar-text); }
+.nav a { color: var(--bar-text); opacity: 0.85; }
+.nav a:hover { opacity: 1; color: #fff; }
+.nav .num { font-weight: 700; margin-right: 0.9em; opacity: 1; color: #fff; }
 
 /* ---------- posts ---------- */
-.entry { margin-bottom: 50px; }
+.entry { margin-bottom: 60px; }
 
 .post {
   background: var(--card);
@@ -109,18 +124,27 @@ strong { color: var(--strong); }
   overflow: hidden;
 }
 
-.post-title {
-  margin: 0;
-  padding: 1.25em 1.6em 0;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.5em;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--strong);
-  line-height: 1.4;
+/* gray strip along the bottom of every post, like the original's footer bar */
+.post::after {
+  content: '';
+  display: block;
+  height: 14px;
+  background: var(--bar);
 }
 
-.post-body { padding: 2em; }
+.post-title {
+  margin: 0;
+  padding: 30px var(--pad) 0;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 1.6em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--strong);
+  line-height: 1.35;
+}
+
+.post-body { padding: var(--pad); }
 .post-body > :first-child { margin-top: 0; }
 .post-body > :last-child { margin-bottom: 0; }
 
@@ -128,18 +152,27 @@ strong { color: var(--strong); }
 .text:first-child p:first-child { margin-top: 0; }
 .text:last-child p:last-child { margin-bottom: 0; }
 
-.post.big .text {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  font-size: 1.5em;
-  line-height: 1.6;
-  color: var(--strong);
+/* bold text inside posts reads as a small-caps label, like the original */
+.post-body strong {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
+
+/* "style": "big" posts */
+.post.big .text {
+  font-weight: 700;
+  font-size: 1.55em;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.post.big .post-body strong { font-size: inherit; text-transform: none; letter-spacing: inherit; }
 
 blockquote.text {
   margin: 1.25em 0 1.25em 1.25em;
   padding-left: 1.25em;
-  border-left: 1px solid var(--muted);
+  border-left: 1px solid var(--border);
 }
 
 /* images: 400px wide, height follows the image's shape, left-aligned.
@@ -161,16 +194,35 @@ blockquote.text {
   text-align: left;
 }
 
+/* ---------- tags ---------- */
+.tags { margin-top: 18px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.1em; }
+.tags a {
+  display: inline-block;
+  background: var(--chip);
+  color: var(--text);
+  padding: 0.55em 1.1em;
+  margin: 0 0.9em 0.75em 0;
+  box-shadow: 0 0 4px 1px var(--shadow);
+}
+.tags a:hover { background: var(--bar); color: var(--bar-text); }
+
+.filter {
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85em;
+}
+
 /* ---------- reading-order labels ---------- */
 .marker {
   margin: 0 0 30px;
+  padding: 0 4px;
   font-size: 0.75em;
   text-transform: lowercase;
   letter-spacing: 0.15em;
   color: var(--muted);
 }
 .marker .arrow { display: inline-block; margin-left: 0.4em; }
-.marker.start { margin-bottom: 30px; }
 .marker.end { margin-top: -10px; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -181,27 +233,10 @@ blockquote.text {
   50% { transform: translateY(3px); }
 }
 
-/* ---------- tags ---------- */
-.tags { margin-top: 1.25em; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.1em; }
-.tags a {
-  display: inline-block;
-  background: var(--card);
-  color: var(--text);
-  padding: 0.5em 1em;
-  margin: 0 1em 0.75em 0;
-  box-shadow: 0 0 5px 1px var(--shadow);
-}
-.tags a:hover { background: var(--muted); color: var(--card); }
-
-.filter {
-  margin-bottom: 30px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.85em;
-}
-
 /* ---------- small screens ---------- */
-@media (max-width: 860px) {
-  .layout { grid-template-columns: minmax(0, 540px); gap: 40px; padding-top: 90px; }
+@media (max-width: 900px) {
+  :root { --pad: 24px; }
+  .layout { grid-template-columns: minmax(0, 580px); gap: 40px; padding-top: 100px; }
   .sidebar-card { position: static; }
+  .sidebar-image { aspect-ratio: 16 / 7; }
 }
