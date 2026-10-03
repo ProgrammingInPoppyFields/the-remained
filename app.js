@@ -79,7 +79,7 @@ function renderPost(post) {
   const tags = (post.tags || [])
     .map(t => `<a href="#tag/${encodeURIComponent(t)}">${escapeHtml(t)}</a>`)
     .join('');
-  const classes = ['post'];
+  const classes = ['post', 'paper'];
   if (post.style === 'big') classes.push('big');
   if (post.speaker) classes.push(`speaker-${post.speaker}`);
   return `
@@ -93,6 +93,34 @@ function renderPost(post) {
 }
 
 let DATA = null;
+
+// The dictionary-entry header at the top of the page.
+// Each sense gets a number, a small label and its text; a sense marked
+// "highlight": true is set apart below a dotted line, in typewriter type.
+function renderDefinition(def) {
+  const el = document.getElementById('definition');
+  if (!def || !def.term) { el.hidden = true; return; }
+  const inline = t => formatParagraphs(t || '').replace(/<\/?p>/g, '');
+  const senses = (def.senses || []).map((s, i) => `
+    <li class="sense${s.highlight ? ' highlight' : ''}">
+      <span class="sense-num">${String(i + 1).padStart(2, '0')}</span>
+      <div class="sense-body">
+        ${s.label ? `<span class="sense-label">${escapeHtml(s.label)}</span>` : ''}
+        <span class="sense-text">${inline(s.text)}</span>
+      </div>
+    </li>`).join('');
+  const footer = (def.footer || []).map(f => `<span>${escapeHtml(f)}</span>`).join('');
+  el.innerHTML = `
+    <div class="definition-inner paper">
+      <div class="definition-head">
+        <h1 class="term">${escapeHtml(def.term)}</h1>
+        ${def.pronunciation ? `<span class="pronunciation">${escapeHtml(def.pronunciation)}</span>` : ''}
+      </div>
+      <ol class="senses">${senses}</ol>
+      <div class="card-footer">${footer}</div>
+    </div>`;
+  el.hidden = false;
+}
 
 // The "voices" card at the top of the feed. Each speaker's name and note
 // are set in that speaker's own font; clicking one shows only their posts.
@@ -169,16 +197,11 @@ fetch('posts.json')
     const site = data.site || {};
     if (site.title) {
       document.title = site.title;
-      document.getElementById('site-title').textContent = site.title;
     }
+    renderDefinition(site.definition);
     if (site.favicon) {
       // square crop, 128x128 so it stays sharp on retina tabs
       document.getElementById('favicon').href = croppedUrl(site.favicon, 128, 128);
-    }
-    if (site.sidebarImage) {
-      const img = document.getElementById('sidebar-image');
-      img.src = croppedUrl(site.sidebarImage, 600, 750);
-      img.hidden = false;
     }
     if (site.description) {
       document.getElementById('site-description').innerHTML = formatParagraphs(site.description);

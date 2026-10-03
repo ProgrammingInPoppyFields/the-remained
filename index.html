@@ -3,26 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE REMAINED</title>
-  <meta name="description" content="Those who never left. An epistolary fiction told through one narrator's blog: a serialized record of altered continuation.">
+  <title>CORDYCEPS</title>
+  <meta name="description" content="CORDYCEPS. Those who never left. An epistolary fiction told through one blog in several voices: a serialized record of altered continuation.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- site chrome fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@700&family=Jost:wght@300;400&family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <!-- speaker fonts: Archivist, Navigator, Grower, Found Documents -->
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Shantell+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link id="favicon" rel="icon" href="data:,">
 </head>
 <body>
-  <header class="topbar">
-    <a href="#" id="site-title" class="site-title">THE REMAINED</a>
-  </header>
+  <!-- dictionary-entry header: content comes from "definition" in posts.json -->
+  <section id="definition" class="definition" hidden></section>
 
   <main class="layout">
     <aside class="sidebar">
-      <div class="sidebar-card">
-        <img id="sidebar-image" class="sidebar-image" alt="" hidden>
+      <div class="sidebar-card paper">
         <div id="site-description" class="description"></div>
         <div id="site-about" class="about" hidden></div>
         <div class="how-to-read">
@@ -35,7 +33,7 @@
     </aside>
 
     <section class="feed">
-      <div id="voices" class="voices" hidden></div>
+      <div id="voices" class="voices paper" hidden></div>
       <div id="filter" class="filter" hidden></div>
       <div id="posts"></div>
     </section>

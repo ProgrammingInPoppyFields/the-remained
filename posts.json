@@ -1,10 +1,19 @@
 {
   "site": {
-    "title": "THE REMAINED",
+    "title": "CORDYCEPS",
+    "definition": {
+      "term": "CORDYCEPS",
+      "pronunciation": "/ˈkɔːrdɪsɛps/",
+      "senses": [
+        { "label": "popular", "text": "the “zombie fungus.”" },
+        { "label": "medicinal", "text": "a fungus traditionally used for health and vitality." },
+        { "label": "in this story", "text": "something considerably less cooperative with categories.", "highlight": true }
+      ],
+      "footer": ["REF. C-03", "THE REMAINED", "REV. 01"]
+    },
     "favicon": "https://images.unsplash.com/photo-1664263966666-b5e60f1f315f?q=80&w=1358&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "sidebarImage": "https://images.unsplash.com/photo-1664263966666-b5e60f1f315f?q=80&w=1358&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "description": "**Those who never left.**\nA serialized record of altered continuation.",
-    "about": "An epistolary fiction, told entirely through one narrator’s blog. Infection horror, minus the horror: a body that adapts instead of turning, and everyone around it learning how close to stand.",
+    "about": "An epistolary fiction, told through one blog in several voices. Infection horror, minus the horror: bodies that adapt instead of turning, and everyone around them learning how close to stand.",
     "speakers": {
       "archivist": {"name": "The Archivist", "note": "Keeps the record. Explains, corrects, logs everything like weather."},
       "navigator": {"name": "The Navigator", "note": "Perception, rerouted. Rooms before faces."},

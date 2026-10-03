@@ -2,7 +2,12 @@
    Matched to the original Tumblr theme: soft warm-neutral grays,
    charcoal-gray bars, near-black headings. */
 :root {
-  --bg: #e8e8e8;          /* page background */
+  /* page geometry: the header card spans sidebar + gap + feed exactly */
+  --side-w: 240px;
+  --feed-w: 580px;
+  --col-gap: 90px;
+
+  --bg: #dddddd;          /* page background */
   --card: #e0e0e0;        /* posts, sidebar, top bar */
   --text: #555555;        /* body text */
   --strong: #141414;      /* titles, bold */
@@ -33,104 +38,201 @@ a { color: var(--muted); text-decoration: none; transition: color 0.3s, backgrou
 a:hover { color: var(--strong); }
 strong { color: var(--strong); }
 
-/* ---------- top bar ---------- */
-.topbar {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 10;
-  background: var(--card);
-  box-shadow: 0 1px 3px var(--shadow);
-  padding: 18px 16px;
-  text-align: center;
+/* ---------- paper cards ----------
+   Shared look for the header card, the sidebar and the voices card:
+   off-white card stock with grain, fibers and faint mottling, lifted
+   off the page with layered shadows plus a soft contact shadow below. */
+.paper {
+  --ink: #1d1d1b;
+  --ink-soft: #3d3c39;
+  --rule: #4a4945;
+  --rule-soft: rgba(29, 29, 27, 0.28);
+  position: relative;
+  color: var(--ink);
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  letter-spacing: 0.02em;
+  background-color: var(--paper-color, #cdcdca);
+  /* paper surface: embossed tooth, specks, cloudy pulp, soft light falloff */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='t' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' seed='2' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' surfaceScale='1.1' diffuseConstant='1.2' lighting-color='%23ffffff'%3E%3CfeDistantLight azimuth='225' elevation='65'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)' opacity='0.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.25  0 0 0 0 0.25  0 0 0 0 0.25  0 0 16 0 -11.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='0.35'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.018' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.35  0 0 0 0 0.35  0.16 0 0 0 -0.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.04) 100%);
+  background-blend-mode: multiply, normal, normal, normal;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35),
+    inset 0 0 28px rgba(0, 0, 0, 0.08),
+    0 1px 1px rgba(0, 0, 0, 0.16),
+    0 2px 3px rgba(0, 0, 0, 0.12),
+    0 7px 12px -3px rgba(0, 0, 0, 0.22),
+    0 20px 30px -12px rgba(0, 0, 0, 0.40);
+}
+/* contact shadow: a soft dark ellipse just under the bottom edge */
+.paper::after {
+  content: '';
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 100%;
+  height: 26px;
+  pointer-events: none;
+  background: radial-gradient(ellipse 50% 100% at 50% 0%, rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0) 70%);
+  filter: blur(3px);
 }
 
-.site-title {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  font-size: 1.3em;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--strong);
+/* ---------- dictionary-entry header ----------
+   A typed index card. Its edges line up with the sidebar's left edge
+   and the feed's right edge. */
+.definition {
+  padding: 56px 16px 0;
 }
+.definition[hidden] { display: none; }
+
+.definition-inner {
+  --paper-color: #f1f1ef;   /* same light stock as the posts */
+  max-width: calc(var(--side-w) + var(--col-gap) + var(--feed-w));
+  margin: 0 auto;
+  padding: 26px 34px 16px;
+}
+
+.definition-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--rule);
+}
+.term {
+  margin: 0;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 2em;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+}
+.pronunciation {
+  font-style: italic;
+  font-size: 0.95em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.senses { list-style: none; margin: 0; padding: 0; }
+.sense {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid #8f8d87;
+}
+.sense-num {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-weight: 300;
+  font-size: 1.45em;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+.sense-body {
+  padding-left: 28px;
+  border-left: 1px solid var(--rule);
+}
+.sense-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+}
+.sense-text {
+  display: block;
+  font-size: 0.86em;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.sense.highlight .sense-text { color: var(--ink); }
+.sense-text strong { font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink); }
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  font-weight: 700;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.card-footer:empty { display: none; }
 
 /* ---------- layout ---------- */
+.definition[hidden] + .layout { padding-top: 48px; }
 .layout {
-  max-width: 1000px;
   margin: 0 auto;
-  padding: 120px 16px 100px;
+  padding: 56px 16px 100px;
   display: grid;
-  grid-template-columns: 240px minmax(0, 580px);
-  gap: 90px;
+  grid-template-columns: var(--side-w) minmax(0, var(--feed-w));
+  gap: var(--col-gap);
   justify-content: center;
 }
 
-/* ---------- sidebar ---------- */
+/* ---------- sidebar (paper card) ---------- */
 .sidebar-card {
   position: sticky;
-  top: 120px;
-  background: var(--card);
-  box-shadow: 0 0 5px 1px var(--shadow);
+  top: 32px;
 }
-
-.sidebar-image {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-.sidebar-image[hidden] { display: none; }
+.sidebar-card > * + * { border-top: 1px solid var(--rule-soft); }
 
 .description {
-  padding: 24px 26px 22px;
-  border-bottom: 1px solid var(--border);
+  padding: 22px 24px 18px;
+  font-size: 0.95em;
+  line-height: 1.6;
 }
 .description p { margin: 0; }
+.description strong { color: var(--ink); text-transform: uppercase; letter-spacing: 0.06em; }
 
 .about {
-  padding: 18px 26px 20px;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.85em;
-  line-height: 1.7;
+  padding: 16px 24px 18px;
+  font-size: 0.84em;
+  line-height: 1.65;
+  color: var(--ink-soft);
 }
 .about p { margin: 0; }
 .about p + p { margin-top: 0.8em; }
 .about[hidden] { display: none; }
 
 .how-to-read {
-  padding: 18px 26px 20px;
+  padding: 16px 24px 18px;
   font-size: 0.8em;
-  line-height: 1.8;
-  color: var(--muted);
+  line-height: 1.75;
+  color: var(--ink-soft);
 }
 .how-to-read p { margin: 0; }
 
 .nav {
-  background: var(--bar);
-  padding: 22px 26px;
+  padding: 14px 24px 16px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.9em;
+  letter-spacing: 0.12em;
+  font-size: 0.8em;
+  font-weight: 700;
 }
-.nav a { color: var(--bar-text); opacity: 0.85; }
-.nav a:hover { opacity: 1; color: #fff; }
-.nav .num { font-weight: 700; margin-right: 0.9em; opacity: 1; color: #fff; }
+.sidebar-card .nav { border-top: 1.5px solid var(--rule); }
+.nav a { color: var(--ink); }
+.nav a:hover { color: var(--ink-soft); }
+.nav .num { margin-right: 0.9em; }
 
 /* ---------- posts ---------- */
 .entry { margin-bottom: 60px; }
 
+/* posts are paper too, on a light gray stock, against the darker gray
+   of the header, sidebar and voices cards */
 .post {
-  background: var(--card);
-  box-shadow: 0 0 5px 1px var(--shadow);
-  overflow: hidden;
+  --paper-color: #f1f1ef;
+  color: var(--ink-soft);
 }
-
-/* gray strip along the bottom of every post, like the original's footer bar */
-.post::after {
-  content: '';
-  display: block;
-  height: 14px;
-  background: var(--bar);
-}
+.post .post-title { color: var(--ink); }
+.post-body strong { color: var(--ink); }
 
 .post-title {
   margin: 0;
@@ -228,31 +330,29 @@ blockquote.text {
 .post[class*="speaker-"] .post-title { text-transform: none; letter-spacing: 0.01em; }
 .post.speaker-found .post-title { font-style: italic; }
 
-/* ---------- voices card (top of feed) ---------- */
-.voices {
-  background: var(--card);
-  box-shadow: 0 0 5px 1px var(--shadow);
-  margin-bottom: 44px;
-}
-.voices-label,
-.voices-hint {
-  font-family: 'Roboto', sans-serif;
+/* ---------- voices card (paper, top of feed) ---------- */
+.voices { margin-bottom: 56px; }
+.voices[hidden] { display: none; }
+.voices-label {
+  margin: 0 var(--pad);
+  padding: 20px 0 10px;
+  border-bottom: 1.5px solid var(--rule);
   font-weight: 700;
-  font-size: 0.72em;
+  font-size: 0.85em;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--muted);
+  letter-spacing: 0.14em;
 }
-.voices-label { padding: 22px var(--pad) 6px; }
 .voices-hint {
-  padding: 12px var(--pad);
-  background: var(--bar);
-  color: var(--bar-text);
-  font-weight: 400;
-  text-transform: lowercase;
-  letter-spacing: 0.15em;
+  margin: 0 var(--pad);
+  padding: 11px 0 14px;
+  border-top: 1px solid var(--rule-soft);
+  font-weight: 700;
+  font-size: 0.68em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
 }
-.voices ul { list-style: none; margin: 0; padding: 4px 0 10px; }
+.voices ul { list-style: none; margin: 0; padding: 2px 0 4px; }
 .voice {
   display: flex;
   align-items: baseline;
@@ -261,38 +361,39 @@ blockquote.text {
   border-left: 3px solid transparent;
   transition: background 0.25s, border-color 0.25s;
 }
-.voice + .voice > a { border-top: 1px solid var(--border); }
+.voice + .voice > a { border-top: 1px solid var(--rule-soft); }
 .voice a {
   flex: 1;
   display: block;
   padding: 12px 0;
-  color: var(--text);
+  color: var(--ink-soft);
   font-family: var(--voice-font);
   letter-spacing: var(--voice-track);
 }
-.voice-name { display: block; font-weight: 700; color: var(--strong); font-size: 1.12em; line-height: 1.4; }
+.voice-name { display: block; font-weight: 700; color: var(--ink); font-size: 1.12em; line-height: 1.4; }
 .voice.speaker-found .voice-name { font-style: italic; font-size: 1.25em; }
 .voice-note { display: block; font-size: 0.9em; line-height: 1.5; }
 .voice-count {
-  font-family: 'Roboto', sans-serif;
-  font-size: 0.75em;
-  color: var(--muted);
-  letter-spacing: 0.1em;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: var(--ink-soft);
 }
-.voice:hover { background: rgba(0, 0, 0, 0.025); }
-.voice.active { border-left-color: var(--bar); background: rgba(0, 0, 0, 0.035); }
+.voice:hover { background: rgba(0, 0, 0, 0.04); }
+.voice.active { border-left-color: var(--ink); background: rgba(0, 0, 0, 0.06); }
 
 /* ---------- tags ---------- */
-.tags { margin-top: 18px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.1em; }
+.tags { margin-top: 26px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.1em; }
 .tags a {
   display: inline-block;
-  background: var(--chip);
-  color: var(--text);
-  padding: 0.55em 1.1em;
-  margin: 0 0.9em 0.75em 0;
-  box-shadow: 0 0 4px 1px var(--shadow);
+  background: #f1f1ef;
+  color: #3d3c39;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-weight: 700;
+  padding: 0.45em 1em;
+  margin: 0 0.8em 0.75em 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 6px -2px rgba(0, 0, 0, 0.25);
 }
-.tags a:hover { background: var(--bar); color: var(--bar-text); }
+.tags a:hover { background: #1d1d1b; color: #f1f1ef; }
 
 .filter {
   margin-bottom: 30px;
@@ -311,7 +412,7 @@ blockquote.text {
   color: var(--muted);
 }
 .marker .arrow { display: inline-block; margin-left: 0.4em; }
-.marker.end { margin-top: -10px; }
+.marker.end { margin-top: -10px; padding-bottom: 60px; }
 
 @media (prefers-reduced-motion: no-preference) {
   .marker .arrow { animation: nudge 2.4s ease-in-out infinite; }
@@ -321,10 +422,25 @@ blockquote.text {
   50% { transform: translateY(3px); }
 }
 
+/* The sidebar stays pinned while scrolling, but only on windows tall
+   enough to show all of it. On shorter windows it scrolls with the page,
+   so its bottom ("keep scrollin'", the nav) never gets cut off. */
+@media (max-height: 680px) {
+  .sidebar-card { position: static; }
+}
+
 /* ---------- small screens ---------- */
 @media (max-width: 900px) {
   :root { --pad: 24px; }
-  .layout { grid-template-columns: minmax(0, 580px); gap: 40px; padding-top: 100px; }
+  .definition { padding: 24px 16px 0; }
+  .definition-inner { max-width: var(--feed-w); }
+  .definition-inner { padding: 20px 18px 12px; }
+  .term { font-size: 1.45em; letter-spacing: 0.08em; }
+  .sense { grid-template-columns: 40px 1fr; }
+  .sense-num { font-size: 1.15em; }
+  .sense-body { padding-left: 14px; }
+  .card-footer { font-size: 0.62em; }
+  .layout { grid-template-columns: minmax(0, var(--feed-w)); gap: 40px; padding-top: 32px; }
+  .definition[hidden] + .layout { padding-top: 24px; }
   .sidebar-card { position: static; }
-  .sidebar-image { aspect-ratio: 16 / 7; }
 }

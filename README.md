@@ -1,10 +1,10 @@
 <img src="https://images.unsplash.com/photo-1664263966666-b5e60f1f315f?w=1760&h=600&fit=crop&q=80&auto=format" alt="" width="100%">
 
-# THE REMAINED
+# CORDYCEPS
 
 *Those who never left. A serialized record of altered continuation.*
 
-THE REMAINED is an epistolary fiction told entirely through one narrator's blog. Something fungal-adjacent has settled into people's bodies, and the genre expects an apocalypse: spores, outbreaks, things that click in the dark. None of that happens. The change doesn't spread or hunt anyone. It builds workarounds around old damage, reroutes perception toward rooms instead of faces, and leaves the narrator to handle what's actually hard, which is everyone else deciding how close to stand.
+CORDYCEPS is an epistolary fiction told through one blog in several voices: an archivist keeping the record, two people living inside the change, and a few documents posted by someone other than their writer. Something fungal-adjacent has settled into people's bodies, and the genre expects an apocalypse: spores, outbreaks, things that click in the dark. None of that happens. The change doesn't spread or hunt anyone. It builds workarounds around old damage, reroutes perception toward rooms instead of faces, and leaves the people living with it to handle what's actually hard, which is everyone else deciding how close to stand.
 
 There is no plot summary and no lore page. The world comes through in short posts: logs, notes to self, an unsent draft, answers to questions people keep asking. Read it like a stranger's blog you found and couldn't stop scrolling.
 
@@ -27,17 +27,31 @@ The top of `posts.json` has the site-wide settings:
 
 ```json
 "site": {
-  "title": "THE REMAINED",
+  "title": "CORDYCEPS",
+  "definition": { ... },
   "favicon": "https://images.unsplash.com/photo-...",
-  "sidebarImage": "https://images.unsplash.com/photo-...",
   "description": "**Those who never left.**\nA serialized record of altered continuation."
 }
 ```
 
-- **favicon**: the browser-tab icon. Paste any Unsplash image link; it gets cropped to a square automatically. Browsers cache favicons hard, so a hard refresh (Cmd+Shift+R) may be needed to see a new one.
-- **sidebarImage**: the photo at the top of the sidebar, cropped to a tall rectangle automatically. Delete the line to hide it.
+- **title**: the name in the browser tab.
+- **definition**: the dictionary-entry header at the top of the page:
 
-Colors live at the top of `style.css`.
+  ```json
+  "definition": {
+    "term": "CORDYCEPS",
+    "pronunciation": "/ˈkɔːrdɪsɛps/",
+    "senses": [
+      { "label": "popular", "text": "the “zombie fungus.”" },
+      { "label": "in this story", "text": "something considerably less cooperative with categories.", "highlight": true }
+    ]
+  }
+  ```
+
+  The header renders as a typed index card whose edges line up with the sidebar and feed below. Add `"footer": ["REF. C-03", "THE REMAINED", "REV. 01"]` for the small typed line along the bottom of the card (any number of items, spread evenly). Senses are numbered automatically in order. `"highlight": true` makes a sense's text darker. Text supports `*italic*` and `**bold**`. Delete the whole `"definition"` block to hide the header.
+- **favicon**: the browser-tab icon. Paste any Unsplash image link; it gets cropped to a square automatically. Browsers cache favicons hard, so a hard refresh (Cmd+Shift+R) may be needed to see a new one.
+
+Colors and the column widths (`--side-w`, `--feed-w`, `--col-gap`) live at the top of `style.css`. The header card is sized from those three, so it stays aligned if you change them.
 
 ## The voices
 
