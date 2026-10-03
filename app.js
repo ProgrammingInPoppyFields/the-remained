@@ -79,9 +79,12 @@ function renderPost(post) {
   const tags = (post.tags || [])
     .map(t => `<a href="#tag/${encodeURIComponent(t)}">${escapeHtml(t)}</a>`)
     .join('');
+  const classes = ['post'];
+  if (post.style === 'big') classes.push('big');
+  if (post.speaker) classes.push(`speaker-${post.speaker}`);
   return `
     <div class="entry">
-      <article class="post ${post.style === 'big' ? 'big' : ''}">
+      <article class="${classes.join(' ')}">
         ${title}
         <div class="post-body">${body}</div>
       </article>
@@ -91,15 +94,50 @@ function renderPost(post) {
 
 let DATA = null;
 
+// The "voices" card at the top of the feed. Each speaker's name and note
+// are set in that speaker's own font; clicking one shows only their posts.
+function renderVoices(active) {
+  const speakers = (DATA.site && DATA.site.speakers) || {};
+  const ids = Object.keys(speakers);
+  const el = document.getElementById('voices');
+  if (!ids.length) { el.hidden = true; return; }
+  const counts = {};
+  DATA.posts.forEach(p => { if (p.speaker) counts[p.speaker] = (counts[p.speaker] || 0) + 1; });
+  el.innerHTML = `
+    <div class="voices-label">the voices</div>
+    <ul>
+      ${ids.map(id => `
+        <li class="voice speaker-${escapeHtml(id)}${active === id ? ' active' : ''}">
+          <a href="#speaker/${encodeURIComponent(id)}">
+            <span class="voice-name">${escapeHtml(speakers[id].name || id)}</span>
+            <span class="voice-note">${escapeHtml(speakers[id].note || '')}</span>
+          </a>
+          <span class="voice-count">${counts[id] || 0}</span>
+        </li>`).join('')}
+    </ul>
+    <div class="voices-hint">tell them apart by their handwriting</div>`;
+  el.hidden = false;
+}
+
 function render() {
-  const match = location.hash.match(/^#tag\/(.+)$/);
-  const tag = match ? decodeURIComponent(match[1]) : null;
-  const posts = tag ? DATA.posts.filter(p => (p.tags || []).includes(tag)) : DATA.posts;
+  const tagMatch = location.hash.match(/^#tag\/(.+)$/);
+  const spkMatch = location.hash.match(/^#speaker\/(.+)$/);
+  const tag = tagMatch ? decodeURIComponent(tagMatch[1]) : null;
+  const speaker = spkMatch ? decodeURIComponent(spkMatch[1]) : null;
+  let posts = DATA.posts;
+  if (tag) posts = posts.filter(p => (p.tags || []).includes(tag));
+  if (speaker) posts = posts.filter(p => p.speaker === speaker);
+
+  renderVoices(speaker);
 
   const filter = document.getElementById('filter');
-  if (tag) {
+  if (tag || speaker) {
+    const speakers = (DATA.site && DATA.site.speakers) || {};
+    const label = tag
+      ? `tagged: <strong>${escapeHtml(tag)}</strong>`
+      : `voice: <strong>${escapeHtml((speakers[speaker] && speakers[speaker].name) || speaker)}</strong>`;
     filter.hidden = false;
-    filter.innerHTML = `tagged: <strong>${escapeHtml(tag)}</strong> (${posts.length}) &nbsp;/&nbsp; <a href="#">show all</a>`;
+    filter.innerHTML = `${label} (${posts.length}) &nbsp;/&nbsp; <a href="#">show all</a>`;
   } else {
     filter.hidden = true;
   }
@@ -110,7 +148,7 @@ function render() {
   const marker = (cls, text, arrow = '↓') =>
     `<div class="marker ${cls}">${text}${arrow ? `<span class="arrow">${arrow}</span>` : ''}</div>`;
 
-  let html = marker('start', tag ? 'oldest first' : 'start here. oldest first');
+  let html = marker('start', (tag || speaker) ? 'oldest first' : 'start here. oldest first');
   posts.forEach((p, i) => {
     html += renderPost(p);
     const isLast = i === posts.length - 1;

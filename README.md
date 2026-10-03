@@ -39,6 +39,21 @@ The top of `posts.json` has the site-wide settings:
 
 Colors live at the top of `style.css`.
 
+## The voices
+
+The blog has several writers, told apart by typeface. A card at the top of the feed introduces them; clicking a voice shows only that speaker's posts.
+
+| speaker id  | name            | font                | who they are |
+|-------------|-----------------|---------------------|--------------|
+| `archivist` | The Archivist   | Source Serif 4      | Keeps the record. Explains, corrects, logs everything like weather. |
+| `navigator` | The Navigator   | IBM Plex Sans       | Perception, rerouted. Rooms before faces. |
+| `grower`    | The Grower      | Shantell Sans       | The visible one. Still paying rent. |
+| `found`     | Found Documents | Cormorant Garamond  | Words posted by someone other than their writer. |
+
+- **Names and descriptions** on the card: edit `"speakers"` in `posts.json`.
+- **Fonts**: edit the `.speaker-…` blocks in `style.css` (each has `--voice-font`, plus size and spacing tweaks), and update the Google Fonts link in `index.html` if you swap in a new font.
+- **Adding a speaker**: add an entry under `"speakers"` in `posts.json`, a matching `.speaker-yourid` block in `style.css`, and use `"speaker": "yourid"` on posts.
+
 ## Editing posts
 
 Each post looks like this:
@@ -58,6 +73,7 @@ Each post looks like this:
 
 - **Order**: posts show top to bottom in the order they appear in the file, oldest first. New posts go at the **bottom** of the list. Cut and paste to reorder.
 - **title**: optional. Leave it out for untitled posts.
+- **speaker**: who wrote it: `archivist`, `navigator`, `grower`, or `found`. Each speaker's posts are set in their own typeface, so readers tell the voices apart by font.
 - **style**: optional. `"big"` makes the text large and bold.
 - **Bold** text inside posts shows as a small uppercase label (like `LOG:`), matching the original theme. In `"big"` posts it stays normal.
 - **body**: a list of blocks, shown in order. A block is either text (a string) or an image.

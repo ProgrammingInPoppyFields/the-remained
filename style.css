@@ -194,6 +194,94 @@ blockquote.text {
   text-align: left;
 }
 
+/* ---------- speaker voices ----------
+   Each speaker writes in their own typeface. To recast a voice,
+   change its --voice-font here (and the font link in index.html). */
+.speaker-archivist {
+  --voice-font: 'Source Serif 4', Georgia, serif;
+  --voice-size: 1.02em;
+  --voice-track: 0.01em;
+}
+.speaker-navigator {
+  --voice-font: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --voice-size: 0.97em;
+  --voice-track: 0.03em;
+}
+.speaker-grower {
+  --voice-font: 'Shantell Sans', 'Comic Neue', 'Trebuchet MS', sans-serif;
+  --voice-size: 0.95em;
+  --voice-track: 0.01em;
+}
+.speaker-found {
+  --voice-font: 'Cormorant Garamond', Garamond, 'Times New Roman', serif;
+  --voice-size: 1.16em;
+  --voice-track: 0.02em;
+}
+
+/* posts take on their speaker's font, titles included */
+.post[class*="speaker-"] .post-body,
+.post[class*="speaker-"] .post-title {
+  font-family: var(--voice-font);
+  letter-spacing: var(--voice-track);
+}
+.post[class*="speaker-"] .post-body { font-size: var(--voice-size); }
+.post[class*="speaker-"] .post-title { text-transform: none; letter-spacing: 0.01em; }
+.post.speaker-found .post-title { font-style: italic; }
+
+/* ---------- voices card (top of feed) ---------- */
+.voices {
+  background: var(--card);
+  box-shadow: 0 0 5px 1px var(--shadow);
+  margin-bottom: 44px;
+}
+.voices-label,
+.voices-hint {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+.voices-label { padding: 22px var(--pad) 6px; }
+.voices-hint {
+  padding: 12px var(--pad);
+  background: var(--bar);
+  color: var(--bar-text);
+  font-weight: 400;
+  text-transform: lowercase;
+  letter-spacing: 0.15em;
+}
+.voices ul { list-style: none; margin: 0; padding: 4px 0 10px; }
+.voice {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 0 var(--pad) 0 calc(var(--pad) - 3px);
+  border-left: 3px solid transparent;
+  transition: background 0.25s, border-color 0.25s;
+}
+.voice + .voice > a { border-top: 1px solid var(--border); }
+.voice a {
+  flex: 1;
+  display: block;
+  padding: 12px 0;
+  color: var(--text);
+  font-family: var(--voice-font);
+  letter-spacing: var(--voice-track);
+}
+.voice-name { display: block; font-weight: 700; color: var(--strong); font-size: 1.12em; line-height: 1.4; }
+.voice.speaker-found .voice-name { font-style: italic; font-size: 1.25em; }
+.voice-note { display: block; font-size: 0.9em; line-height: 1.5; }
+.voice-count {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.75em;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+.voice:hover { background: rgba(0, 0, 0, 0.025); }
+.voice.active { border-left-color: var(--bar); background: rgba(0, 0, 0, 0.035); }
+
 /* ---------- tags ---------- */
 .tags { margin-top: 18px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.1em; }
 .tags a {
