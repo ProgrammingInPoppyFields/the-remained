@@ -1,4 +1,4 @@
-<img src="https://images.unsplash.com/photo-1664263966666-b5e60f1f315f?w=1400&h=300&fit=crop&crop=entropy&q=80&auto=format" alt="" width="100%">
+<img src="https://images.unsplash.com/photo-1664263966666-b5e60f1f315f?w=1760&h=600&fit=crop&q=80&auto=format" alt="" width="100%">
 
 # THE REMAINED
 
